@@ -1,0 +1,120 @@
+> #run_analysis.R
+> 
+> # Start working on the data that's been unzipped to the current working directory under the folder 'UCI HAR Dataset'
+> # File p .... [TRUNCATED] 
+
+> # Human Activity Recognition Using Smartphones Dataset Version 1.0
+> #- 'README.txt'
+> #- 'features.txt': List of all features.
+> #- 'features_info. .... [TRUNCATED] 
+
+> Y_Activity_Train_Data  <- read.table("UCI HAR Dataset/train/Y_train.txt")
+
+> Subject_Train_Data     <- read.table("UCI HAR Dataset/train/subject_train.txt")
+
+> Subject_Test_Data      <- read.table("UCI HAR Dataset/test/subject_test.txt")
+
+> X_Features_Test_Data   <- read.table("UCI HAR Dataset/test/X_test.txt")
+
+> X_Features_Train_Data  <- read.table("UCI HAR Dataset/train/X_train.txt")
+
+> ## Merge data - training & test sets - using rbind
+> Subject_Data    <- rbind(Subject_Train_Data, Subject_Test_Data)
+
+> Y_Activity_Data <- rbind(Y_Activity_Train_Data, Y_Activity_Test_Data)
+
+> X_Features_Data <- rbind(X_Features_Train_Data, X_Features_Test_Data)
+
+> # update values with correct activity names
+> FeaturesNames <- read.table("UCI HAR Dataset/features.txt")
+
+> names(Y_Activity_Data)<- c("activity")
+
+> names(Subject_Data)<-c("subject")
+
+> names(X_Features_Data)<- FeaturesNames$V2
+
+> #Merge all data
+> Combined_Data <- cbind(Subject_Data, Y_Activity_Data)
+
+> All_Data <- cbind(X_Features_Data, Combined_Data)
+
+> ##Extracts only the measurements on the mean & standard deviation for each measurement
+> #Subset names of features
+> Subdata_Features_Names <- Featu .... [TRUNCATED] 
+
+> #Subset the data
+> Subset_Names <- c(as.character(Subdata_Features_Names), "subject", "activity" )
+
+> Subset_Data <- subset(All_Data, select=Subset_Names)
+
+> ##Uses descriptive activity names to name the activities in the data set
+> 
+> ActivityLabels <- read.table("UCI HAR Dataset/activity_labels.txt")
+
+> ##Appropriately labels the data set with descriptive variable names
+> names(Subset_Data) <- gsub("^t", "time", names(Subset_Data))
+
+> names(Subset_Data) <- gsub("^f", "frequency", names(Subset_Data))
+
+> names(Subset_Data) <- gsub("Acc", "Accelerometer", names(Subset_Data))
+
+> names(Subset_Data) <- gsub("Gyro", "Gyroscope", names(Subset_Data))
+
+> names(Subset_Data) <- gsub("Mag", "Magnitude", names(Subset_Data))
+
+> names(Subset_Data) <- gsub("BodyBody", "Body", names(Subset_Data))
+
+> # check
+> names(Subset_Data)
+ [1] "timeBodyAccelerometer-mean()-X"                 "timeBodyAccelerometer-mean()-Y"                
+ [3] "timeBodyAccelerometer-mean()-Z"                 "timeBodyAccelerometer-std()-X"                 
+ [5] "timeBodyAccelerometer-std()-Y"                  "timeBodyAccelerometer-std()-Z"                 
+ [7] "timeGravityAccelerometer-mean()-X"              "timeGravityAccelerometer-mean()-Y"             
+ [9] "timeGravityAccelerometer-mean()-Z"              "timeGravityAccelerometer-std()-X"              
+[11] "timeGravityAccelerometer-std()-Y"               "timeGravityAccelerometer-std()-Z"              
+[13] "timeBodyAccelerometerJerk-mean()-X"             "timeBodyAccelerometerJerk-mean()-Y"            
+[15] "timeBodyAccelerometerJerk-mean()-Z"             "timeBodyAccelerometerJerk-std()-X"             
+[17] "timeBodyAccelerometerJerk-std()-Y"              "timeBodyAccelerometerJerk-std()-Z"             
+[19] "timeBodyGyroscope-mean()-X"                     "timeBodyGyroscope-mean()-Y"                    
+[21] "timeBodyGyroscope-mean()-Z"                     "timeBodyGyroscope-std()-X"                     
+[23] "timeBodyGyroscope-std()-Y"                      "timeBodyGyroscope-std()-Z"                     
+[25] "timeBodyGyroscopeJerk-mean()-X"                 "timeBodyGyroscopeJerk-mean()-Y"                
+[27] "timeBodyGyroscopeJerk-mean()-Z"                 "timeBodyGyroscopeJerk-std()-X"                 
+[29] "timeBodyGyroscopeJerk-std()-Y"                  "timeBodyGyroscopeJerk-std()-Z"                 
+[31] "timeBodyAccelerometerMagnitude-mean()"          "timeBodyAccelerometerMagnitude-std()"          
+[33] "timeGravityAccelerometerMagnitude-mean()"       "timeGravityAccelerometerMagnitude-std()"       
+[35] "timeBodyAccelerometerJerkMagnitude-mean()"      "timeBodyAccelerometerJerkMagnitude-std()"      
+[37] "timeBodyGyroscopeMagnitude-mean()"              "timeBodyGyroscopeMagnitude-std()"              
+[39] "timeBodyGyroscopeJerkMagnitude-mean()"          "timeBodyGyroscopeJerkMagnitude-std()"          
+[41] "frequencyBodyAccelerometer-mean()-X"            "frequencyBodyAccelerometer-mean()-Y"           
+[43] "frequencyBodyAccelerometer-mean()-Z"            "frequencyBodyAccelerometer-std()-X"            
+[45] "frequencyBodyAccelerometer-std()-Y"             "frequencyBodyAccelerometer-std()-Z"            
+[47] "frequencyBodyAccelerometerJerk-mean()-X"        "frequencyBodyAccelerometerJerk-mean()-Y"       
+[49] "frequencyBodyAccelerometerJerk-mean()-Z"        "frequencyBodyAccelerometerJerk-std()-X"        
+[51] "frequencyBodyAccelerometerJerk-std()-Y"         "frequencyBodyAccelerometerJerk-std()-Z"        
+[53] "frequencyBodyGyroscope-mean()-X"                "frequencyBodyGyroscope-mean()-Y"               
+[55] "frequencyBodyGyroscope-mean()-Z"                "frequencyBodyGyroscope-std()-X"                
+[57] "frequencyBodyGyroscope-std()-Y"                 "frequencyBodyGyroscope-std()-Z"                
+[59] "frequencyBodyAccelerometerMagnitude-mean()"     "frequencyBodyAccelerometerMagnitude-std()"     
+[61] "frequencyBodyAccelerometerJerkMagnitude-mean()" "frequencyBodyAccelerometerJerkMagnitude-std()" 
+[63] "frequencyBodyGyroscopeMagnitude-mean()"         "frequencyBodyGyroscopeMagnitude-std()"         
+[65] "frequencyBodyGyroscopeJerkMagnitude-mean()"     "frequencyBodyGyroscopeJerkMagnitude-std()"     
+[67] "subject"                                        "activity"                                      
+
+> ## Create seperate tidy data set
+> library(plyr);
+
+> Subset_Data2 <- aggregate(. ~subject + activity, Subset_Data, mean)
+
+> Subset_Data2 <- Subset_Data2[order(Subset_Data2$subject,Subset_Data2$activity),]
+
+> #Text format output
+> write.table(Subset_Data2, file = "tidydata.txt",row.name=FALSE)
+
+> #CSV format output
+> write.csv(file="tidydata.csv", Subset_Data2)
+
+> # Reference: https://rstudio-pubs-static.s3.amazonaws.com/37290_8e5a126a3a044b95881ae8df530da583.html
+> 
+> 
